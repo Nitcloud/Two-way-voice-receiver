@@ -1,4 +1,7 @@
-module Demodule
+module Demodule #(
+	parameter INPUT_WIDTH  = 8,
+	parameter OUTPUT_WIDTH = 24
+)
 (
     input                       clk_in,
     output                      clk_out,  
@@ -7,9 +10,6 @@ module Demodule
     input  [INPUT_WIDTH - 1:0]  data_in,
     output [OUTPUT_WIDTH - 1:0] Demodule_OUT
 );
-
-parameter INPUT_WIDTH  = 8;
-parameter OUTPUT_WIDTH = 24;
 
 wire signed [11:0] I_SIG;
 wire signed [11:0] Q_SIG;
