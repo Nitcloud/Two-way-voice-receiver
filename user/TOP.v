@@ -97,11 +97,5 @@ DAC_PWM DAC_PWM_CH1(
     .DAC_PWM(DAC_CH1)
 );
 
-// DAC_PWM DAC_PWM_CH1(
-//     .clk_in(clk_500m),
-//     .RST(0),
-//     .data_in({Audio_wave_2[16:0],15'd0}),
-//     .DAC_PWM(DAC_CH1)
-// );
 endmodule
 

@@ -1,13 +1,14 @@
-module IQ_Frontend_Filter
-(
+module IQ_Frontend_Filter #(
+	parameter INPUT_WIDTH = 8,
+	parameter OUTPUT_WIDTH = 12
+)(
     input                         clk_in,
     input                         RST,
     input  [INPUT_WIDTH - 1 : 0]  filter_in,
     output [OUTPUT_WIDTH - 1 : 0] filter_out
 );
 
-parameter INPUT_WIDTH = 8;
-parameter OUTPUT_WIDTH = 12;
+
 
 wire        [22:0] Fiter_wave;
 FIR_100M_10_7M_BPF FIR_100M_10_7M_BPF_u0(

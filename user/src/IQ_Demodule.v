@@ -1,5 +1,9 @@
-module IQ_Demodule
-(
+module IQ_Demodule #(
+	parameter LO_WIDTH     = 12,
+	parameter Fiter_width  = 12,
+	parameter INPUT_WIDTH  = 8,
+	parameter OUTPUT_WIDTH = 12
+)(
     input                       clk_in,
     output                      clk_out,
     
@@ -10,9 +14,7 @@ module IQ_Demodule
     output [OUTPUT_WIDTH - 1:0] Q_OUT
 );
 
-parameter INPUT_WIDTH  = 8;
-parameter OUTPUT_WIDTH = 12;
-parameter Fiter_width  = 12;
+
 
 wire [Fiter_width - 1 : 0] filter_out;
 IQ_Frontend_Filter #
@@ -27,41 +29,32 @@ IQ_Frontend_Filter_u
     .filter_in(data_in),
     .filter_out(filter_out)
 );
-//GEN IQ sig
-// wire        [31:0] m_axis_data_tdata;
-// DDS_Gen sin_cos_Gen(
-//     .aclk(clk_in),
-//     .m_axis_data_tdata(m_axis_data_tdata)
-// );
 
-wire        [11:0] sin_wave;
-DDS_Gen #
+wire  [31:0]         pha_diff;
+wire  [LO_WIDTH-1:0] cos_wave;
+wire  [LO_WIDTH-1:0] sin_wave;
+Cordic # (
+    .XY_BITS(LO_WIDTH),               
+    .PH_BITS(32),               //1~32     
+    .ITERATIONS(16),            //1~32
+    .CORDIC_STYLE("ROTATE"),    //ROTATE  //VECTOR
+    .PHASE_ACC("ON")            //ON      //OFF
+)
+IQ_Gen_u 
 (
-    .OUTPUT_WIDTH(12),
-    .PHASE_WIDTH(32)
-) 
-sin_Gen(
-    .clk_in(clk_in),
-    .Fre_word(LO_fre),
-    .Pha_word(32'd0),  //32'd1073741824
-    .wave_out(sin_wave)
-);
-
-wire        [11:0] cos_wave;
-DDS_Gen #
-(
-	.OUTPUT_WIDTH(12),
-	.PHASE_WIDTH(32)
-) 
-cos_Gen(
-    .clk_in(clk_in),
-    .Fre_word(LO_fre),
-    .Pha_word(32'd114890375),  //32'd1073741824
-    .wave_out(cos_wave)
+    .clk_in(clk_100m),
+    .RST(RST),
+    .x_i(0), 
+    .y_i(0),
+    .phase_in(LO_fre), //Fre_word = （(2^PH_BITS)/fc）* f   fc：时钟频率   f输出频率
+        
+    .x_o(cos_wave),
+    .y_o(sin_wave),
+    .phase_out(pha_diff)
 );
 
 wire signed [11:0] I_SIG;
-reg  signed [Fiter_width + 11 : 0] I_SIG_r = 0;
+reg  signed [Fiter_width + LO_WIDTH - 1 : 0] I_SIG_r = 0;
 always @(posedge clk_in) begin
 	if (RST) begin
 		I_SIG_r <= 24'd0;
