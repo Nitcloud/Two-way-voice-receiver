@@ -8,8 +8,6 @@ module IQ_Frontend_Filter #(
     output [OUTPUT_WIDTH - 1 : 0] filter_out
 );
 
-
-
 wire        [22:0] Fiter_wave;
 FIR_100M_10_7M_BPF FIR_100M_10_7M_BPF_u0(
     .clk(clk_in),

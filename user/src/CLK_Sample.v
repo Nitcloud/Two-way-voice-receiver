@@ -23,8 +23,7 @@
 //     .clk_sample(clk_sample)
 // );
 /*******************************************************************************/
-module CLK_Sample
-(
+module CLK_Sample(
     input         clk_in,
     input         RST,
     input  [31:0] sample_fre,

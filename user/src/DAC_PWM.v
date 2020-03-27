@@ -1,7 +1,4 @@
-
-
-module DAC_PWM
-(
+module DAC_PWM(
     input                clk_in,
     input                RST,
     input  signed [31:0] data_in,

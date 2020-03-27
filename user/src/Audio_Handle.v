@@ -48,30 +48,28 @@ FIR_125K_6K_HPF Fiter_HPF(
     .filter_out(Fiter_wave_H)
 );
 
-wire        [11:0] sin_wave;
-DDS_Gen #
+wire  [31:0] pha_diff;
+wire  [11:0] cos_wave;
+wire  [11:0] sin_wave;
+Cordic # (
+    .XY_BITS(12),               
+    .PH_BITS(32),               //1~32     
+    .ITERATIONS(16),            //1~32
+    .CORDIC_STYLE("ROTATE"),    //ROTATE  //VECTOR
+    .PHASE_ACC("ON")            //ON      //OFF
+)
+IQ_Gen_u 
 (
-    .OUTPUT_WIDTH(12),
-    .PHASE_WIDTH(32)
-) 
-sin_Gen(
     .clk_in(clk_125k),
-    .Fre_word(32'd343597383),  //10k
-    .Pha_word(32'd0),          //32'd1073741824
-    .wave_out(sin_wave)
-);
-
-wire        [11:0] cos_wave;
-DDS_Gen #
-(
-    .OUTPUT_WIDTH(12),
-    .PHASE_WIDTH(32)
-) 
-cos_Gen(
-    .clk_in(clk_125k),
-    .Fre_word(32'd343597383), //10k
-    .Pha_word(32'd1073741824),  //32'd1073741824
-    .wave_out(cos_wave)
+    .RST(RST),
+    .x_i(0), 
+    .y_i(0),
+    .phase_in(32'd343597383), //Fre_word = （(2^PH_BITS)/fc）* f   fc：时钟频率   f输出频率
+	.valid_in(1'd1),
+        
+    .x_o(cos_wave),
+    .y_o(sin_wave),
+    .phase_out(pha_diff)
 );
 
 wire signed [11:0] I_SIG;
@@ -109,35 +107,32 @@ FIR_125K_10K_LPF AM_HPF_Q(
     .filter_out(Fiter_wave_Q)
 );
 
-reg [47:0] AM_SIG_I = 0;
-reg [47:0] AM_SIG_Q = 0;
-reg [47:0] AM_SIG_r = 0;
-always @(posedge clk_125k) begin
-    if (RST) begin
-        AM_SIG_I <= 0;
-        AM_SIG_Q <= 0;
-        AM_SIG_r <= 0;
-    end
-    else begin
-        AM_SIG_I <= $signed(Fiter_wave_I[26:3]) * $signed(Fiter_wave_I[26:3]);
-        AM_SIG_Q <= $signed(Fiter_wave_Q[26:3]) * $signed(Fiter_wave_Q[26:3]);
-        AM_SIG_r <= AM_SIG_I + AM_SIG_Q;
-    end
-end
-
-wire      [23:0] Demodule_wave;
-wire             m_axis_dout_tvalid;
-Square Square_Root(
-    .aclk(clk_125k),
-    .s_axis_cartesian_tvalid(1),
-    .s_axis_cartesian_tdata(AM_SIG_r),
-    .m_axis_dout_tvalid(m_axis_dout_tvalid),
-    .m_axis_dout_tdata(Demodule_wave)
+wire        [23:0] Y_diff;
+wire        [23:0] Modulus;
+wire        [31:0] phase_out;
+Cordic #
+(
+    .XY_BITS(24),               
+    .PH_BITS(32),                //1~32
+    .ITERATIONS(16),             //1~32
+    .CORDIC_STYLE("VECTOR")      //ROTATE  //VECTOR
+)
+Demodule_Gen_u 
+(
+    .clk_in(clk_125k),
+    .RST(RST),
+    .x_i(Fiter_wave_I[26:3]), 
+    .y_i(Fiter_wave_Q[26:3]),
+    .phase_in(0),          
+     
+    .x_o(Modulus),
+    .y_o(Y_diff),
+    .phase_out(phase_out)
 );
 
 reg signed [31:0] Audio_wave_2_r;
 always @(posedge clk_125k) begin
-	Audio_wave_2_r <= $signed({Demodule_wave[17:0],14'd0}) - $signed(32'd2147483648);
+	Audio_wave_2_r <= $signed({Modulus[17:0],14'd0}) - $signed(32'd2147483648);
 end
 assign Audio_wave_2 = Audio_wave_2_r;
 

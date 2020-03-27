@@ -1,8 +1,9 @@
 module IQ_Demodule #(
 	parameter LO_WIDTH     = 12,
-	parameter Fiter_width  = 12,
 	parameter INPUT_WIDTH  = 8,
-	parameter OUTPUT_WIDTH = 12
+	parameter OUTPUT_WIDTH = 12,
+	parameter Frontend_Filter = 12,
+	parameter Backend_Filter  = 12
 )(
     input                       clk_in,
     output                      clk_out,
@@ -14,13 +15,11 @@ module IQ_Demodule #(
     output [OUTPUT_WIDTH - 1:0] Q_OUT
 );
 
-
-
-wire [Fiter_width - 1 : 0] filter_out;
+wire [Frontend_Filter - 1 : 0] filter_out;
 IQ_Frontend_Filter #
 (
 	.INPUT_WIDTH(INPUT_WIDTH),
-	.OUTPUT_WIDTH(Fiter_width)
+	.OUTPUT_WIDTH(Frontend_Filter)
 )
 IQ_Frontend_Filter_u
 (
@@ -47,41 +46,33 @@ IQ_Gen_u
     .x_i(0), 
     .y_i(0),
     .phase_in(LO_fre), //Fre_word = （(2^PH_BITS)/fc）* f   fc：时钟频率   f输出频率
+	.valid_in(1'd1),
         
     .x_o(cos_wave),
     .y_o(sin_wave),
     .phase_out(pha_diff)
 );
 
-wire signed [11:0] I_SIG;
-reg  signed [Fiter_width + LO_WIDTH - 1 : 0] I_SIG_r = 0;
+wire signed [Backend_Filter - 1 : 0] I_SIG;
+wire signed [Backend_Filter - 1 : 0] Q_SIG;
+reg  signed [Frontend_Filter + LO_WIDTH - 1 : 0] I_SIG_r = 0;
+reg  signed [Frontend_Filter + LO_WIDTH - 1 : 0] Q_SIG_r = 0;
 always @(posedge clk_in) begin
 	if (RST) begin
 		I_SIG_r <= 24'd0;
-	end
-	else begin
-		I_SIG_r <= $signed(filter_out) * $signed(cos_wave);
-	end
-end
-assign I_SIG = I_SIG_r[Fiter_width + 11 : Fiter_width];
-
-wire signed [11:0] Q_SIG;
-reg  signed [Fiter_width + 11 : 0] Q_SIG_r = 0;
-always @(posedge clk_in) begin
-	if (RST) begin
 		Q_SIG_r <= 24'd0;
 	end
 	else begin
+		I_SIG_r <= $signed(filter_out) * $signed(cos_wave);
 		Q_SIG_r <= $signed(filter_out) * $signed(sin_wave);
 	end
 end
-assign Q_SIG = Q_SIG_r[Fiter_width + 11 : Fiter_width];
-
+assign I_SIG = I_SIG_r[Frontend_Filter + LO_WIDTH - 1 : Frontend_Filter + LO_WIDTH - Backend_Filter];
+assign Q_SIG = Q_SIG_r[Frontend_Filter + LO_WIDTH - 1 : Frontend_Filter + LO_WIDTH - Backend_Filter];
 
 IQ_Backend_Filter #
 (
-	.CNT_WIDTH(10),
-	.INPUT_WIDTH(12),
+	.INPUT_WIDTH(Backend_Filter),
 	.OUTPUT_WIDTH(OUTPUT_WIDTH)
 )
 IQ_Backend_Filter_u
@@ -90,14 +81,11 @@ IQ_Backend_Filter_u
     .clk_out(clk_out),
     .RST(RST),
 
-    .N(400),
-
     .I_IN(I_SIG),
     .Q_IN(Q_SIG),
 
     .I_OUT(I_OUT),
     .Q_OUT(Q_OUT)
 );
-
 
 endmodule
