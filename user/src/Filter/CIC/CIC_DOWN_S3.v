@@ -45,7 +45,7 @@
 module CIC_DOWN_S3 #(
 	parameter FACTOR       = 3,
 	parameter INPUT_WIDTH  = 12,
-	parameter OUTPUT_WIDTH = 12
+	parameter OUTPUT_WIDTH = 15
 )
 (
 	input   clk,
@@ -56,7 +56,7 @@ module CIC_DOWN_S3 #(
 	output  ce_out
 );
 
-localparam FILTER_WIDTH = OUTPUT_WIDTH
+localparam FILTER_WIDTH = OUTPUT_WIDTH;
 ////////////////////////////////////////////////////////////////
 //Module Architecture: CIC_DOWN_S3
 ////////////////////////////////////////////////////////////////
@@ -107,7 +107,7 @@ localparam FILTER_WIDTH = OUTPUT_WIDTH
   wire signed [FILTER_WIDTH:0] sub_temp_1; // sfix16_En11
   //   -- Section 6 Signals 
   wire signed [FILTER_WIDTH-1:0] section_in6; // sfix15_En11
-  reg  signed [FILTER_WIDTH-1:0] diff = 0; // sfix15_En11
+  reg  signed [FILTER_WIDTH-1:0] diff3 = 0; // sfix15_En11
   wire signed [FILTER_WIDTH-1:0] section_out6; // sfix15_En11
   wire signed [FILTER_WIDTH-1:0] sub_cast_4; // sfix15_En11
   wire signed [FILTER_WIDTH-1:0] sub_cast_5; // sfix15_En11
