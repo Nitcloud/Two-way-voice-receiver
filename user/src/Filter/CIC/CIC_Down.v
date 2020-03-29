@@ -3,8 +3,9 @@
 module CIC_Down #
 (
 	parameter SECTIONS     = 3,
+	parameter FACTOR       = 3,
 	parameter INPUT_WIDTH  = 12,
-	parameter OUTPUT_WIDTH = 12
+	parameter OUTPUT_WIDTH = 38
 )
 (
 	input   clk,
@@ -15,47 +16,47 @@ module CIC_Down #
 	output  ce_out
 );
 
-	reg  [8:0] cur_count; // ufix9
+	reg  [15:0] cur_count; // ufix9
 	wire phase_1; // boolean
 	reg  ce_out_reg; // boolean
 
-	reg  signed [INPUT_WIDTH-1:0] input_register; 
+	reg  signed [INPUT_WIDTH-1:0]  input_register; 
 
-	wire signed [INPUT_WIDTH-1:0] section_in[1:6]; 
-	reg  signed [37:0] section_out[1:6];
+	wire signed [INPUT_WIDTH-1:0]  section_in[1:6]; 
+	reg  signed [OUTPUT_WIDTH-1:0] section_out[1:6];
 
-	wire signed [37:0] sum[1:3];      
-	wire signed [37:0] add_cast[0:5]; 
-	wire signed [38:0] add_temp[0:2]; 
+	wire signed [OUTPUT_WIDTH-1:0] sum[1:3];      
+	wire signed [OUTPUT_WIDTH-1:0] add_cast[0:5]; 
+	wire signed [OUTPUT_WIDTH:0]   add_temp[0:2]; 
 
-	reg  signed [37:0] diff[1:3]; 
-	wire signed [37:0] sub_cast[0:5]; 
-	wire signed [38:0] sub_temp[0:2]; 
+	reg  signed [OUTPUT_WIDTH-1:0] diff[1:3]; 
+	wire signed [OUTPUT_WIDTH-1:0] sub_cast[0:5]; 
+	wire signed [OUTPUT_WIDTH:0]   sub_temp[0:2]; 
 
-	reg  signed [37:0] output_register; 
+	reg  signed [OUTPUT_WIDTH-1:0] output_register; 
 
   // Block Statements
   //   ------------------ CE Output Generation ------------------
 	always @ (posedge clk or posedge reset) begin: ce_output
 		if (reset == 1'b1) begin
-		cur_count <= 9'b000000000;
+			cur_count <= 16'd0;
 		end
 		else begin
-		if (clk_enable == 1'b1) begin
-			if (cur_count == 9'b110001111) begin
-				cur_count <= 9'b000000000;
+			if (clk_enable == 1'b1) begin
+				if (cur_count == FACTOR) begin
+					cur_count <= 16'd0;
+				end
+				else begin
+					cur_count <= cur_count + 1;
+				end
 			end
-			else begin
-				cur_count <= cur_count + 1;
-			end
-		end
 		end
 	end // ce_output
-	assign  phase_1 = (cur_count == 9'b000000001 && clk_enable == 1'b1)? 1 : 0;
+	assign  phase_1 = (cur_count == 16'd1 && clk_enable == 1'b1)? 1 : 0;
   //   ------------------ CE Output Register ------------------
 	always @ (posedge clk or posedge reset) begin: ce_output_register
 		if (reset == 1'b1) begin
-		ce_out_reg <= 1'b0;
+			ce_out_reg <= 1'b0;
 		end
 		else begin
 			ce_out_reg <= phase_1;
@@ -67,13 +68,13 @@ module CIC_Down #
 			input_register <= 0;
 		end
 		else begin
-		if (clk_enable == 1'b1) begin
-			input_register <= filter_in;
-		end
+			if (clk_enable == 1'b1) begin
+				input_register <= filter_in;
+			end
 		end
 	end // input_reg_process
   //   ------------------ Section # : Integrator ------------------
-	assign section_in[1] = $signed({{26{input_register[11]}}, input_register});
+	assign section_in[1] = $signed({{(OUTPUT_WIDTH-INPUT_WIDTH){input_register[INPUT_WIDTH-1]}}, input_register});
 
 	genvar j;
 	generate for(j=1;j<=SECTIONS;j=j+1) begin : U
@@ -82,8 +83,8 @@ module CIC_Down #
 		assign add_cast[2*(j-1)+1] = section_out[j];
 		assign sub_cast[2*(j-1)+1] = diff[j];
 
-		assign sum[j]              = add_temp[j-1][37:0];
-		assign section_out[j+3]    = sub_temp[j-1][37:0];
+		assign sum[j]              = add_temp[j-1][OUTPUT_WIDTH-1:0];
+		assign section_out[j+3]    = sub_temp[j-1][OUTPUT_WIDTH-1:0];
 
 		assign add_temp[j-1]       = add_cast[2*(j-1)] + add_cast[2*(j-1)+1];
 		assign sub_temp[j-1]       = sub_cast[2*(j-1)] - sub_cast[2*(j-1)+1];
@@ -98,11 +99,11 @@ module CIC_Down #
 			end
 		end
 		else begin
-		if (clk_enable == 1'b1) begin
-			for (m = 1; m<=SECTIONS; m=m+1) begin
-				section_out[m] <= sum[m];
+			if (clk_enable == 1'b1) begin
+				for (m = 1; m<=SECTIONS; m=m+1) begin
+					section_out[m] <= sum[m];
+				end
 			end
-		end
 		end
 	end
   //   ------------------ Section # : Comb ------------------
@@ -133,9 +134,9 @@ module CIC_Down #
 		output_register <= 0;
 		end
 		else begin
-		if (phase_1 == 1'b1) begin
-			output_register <= section_out6;
-		end
+			if (phase_1 == 1'b1) begin
+				output_register <= section_out6;
+			end
 		end
 	end
 	assign ce_out = ce_out_reg;
