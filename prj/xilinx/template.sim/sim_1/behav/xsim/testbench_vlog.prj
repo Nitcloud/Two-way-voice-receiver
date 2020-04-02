@@ -1,0 +1,12 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../../../user/src/Filter/CIC/CIC_DOWN_2.v" \
+"../../../../../../user/src/Filter/CIC/CIC_DOWN_S3.v" \
+"../../../../../../user/sim/DDS_Gen.v" \
+"../../../../../../user/sim/testbench.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

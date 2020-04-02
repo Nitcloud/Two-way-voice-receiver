@@ -1,11 +1,11 @@
 `timescale 1 ns / 1 ns
 
-module CIC_Down #
+module CIC_DOWN #
 (
 	parameter SECTIONS     = 3,
-	parameter FACTOR       = 3,
+	parameter FACTOR       = 5,
 	parameter INPUT_WIDTH  = 12,
-	parameter OUTPUT_WIDTH = 38
+	parameter OUTPUT_WIDTH = 18
 )
 (
 	input   clk,
@@ -22,18 +22,19 @@ module CIC_Down #
 
 	reg  signed [INPUT_WIDTH-1:0]  input_register; 
 
-	wire signed [INPUT_WIDTH-1:0]  section_in[1:6]; 
-	reg  signed [OUTPUT_WIDTH-1:0] section_out[1:6];
+	wire signed [INPUT_WIDTH-1:0]  section_in[1:2*SECTIONS]; 
+	reg  signed [OUTPUT_WIDTH-1:0] section_out_r[1:SECTIONS];
+	wire signed [OUTPUT_WIDTH-1:0] section_out[SECTIONS+1:2*SECTIONS];
 
-	wire signed [OUTPUT_WIDTH-1:0] sum[1:3];      
-	wire signed [OUTPUT_WIDTH-1:0] add_cast[0:5]; 
-	wire signed [OUTPUT_WIDTH:0]   add_temp[0:2]; 
+	wire signed [OUTPUT_WIDTH-1:0] sum[1:SECTIONS];      
+	wire signed [OUTPUT_WIDTH-1:0] add_cast[0:2*SECTIONS-1]; 
+	wire signed [OUTPUT_WIDTH:0]   add_temp[0:SECTIONS-1]; 
 
-	reg  signed [OUTPUT_WIDTH-1:0] diff[1:3]; 
-	wire signed [OUTPUT_WIDTH-1:0] sub_cast[0:5]; 
-	wire signed [OUTPUT_WIDTH:0]   sub_temp[0:2]; 
+	reg  signed [OUTPUT_WIDTH-1:0] diff[1:SECTIONS]; 
+	wire signed [OUTPUT_WIDTH-1:0] sub_cast[0:2*SECTIONS-1]; 
+	wire signed [OUTPUT_WIDTH:0]   sub_temp[0:SECTIONS-1]; 
 
-	reg  signed [OUTPUT_WIDTH-1:0] output_register; 
+	reg  signed [OUTPUT_WIDTH-1:0] output_register = 0; 
 
   // Block Statements
   //   ------------------ CE Output Generation ------------------
@@ -77,10 +78,10 @@ module CIC_Down #
 	assign section_in[1] = $signed({{(OUTPUT_WIDTH-INPUT_WIDTH){input_register[INPUT_WIDTH-1]}}, input_register});
 
 	genvar j;
-	generate for(j=1;j<=SECTIONS;j=j+1) begin : U
+	generate for(j=1;j<=SECTIONS;j=j+1) begin : Integrator
 		assign sub_cast[2*(j-1)]   = section_in[j+3];
 		assign add_cast[2*(j-1)]   = section_in[j];
-		assign add_cast[2*(j-1)+1] = section_out[j];
+		assign add_cast[2*(j-1)+1] = section_out_r[j];
 		assign sub_cast[2*(j-1)+1] = diff[j];
 
 		assign sum[j]              = add_temp[j-1][OUTPUT_WIDTH-1:0];
@@ -95,20 +96,20 @@ module CIC_Down #
 	always @ (posedge clk or posedge reset) begin: integrator_delay_section
 		if (reset == 1'b1) begin
 			for (m = 1; m<=SECTIONS; m=m+1) begin
-				section_out[m] <= 0;
+				section_out_r[m] <= 0;
 			end
 		end
 		else begin
 			if (clk_enable == 1'b1) begin
 				for (m = 1; m<=SECTIONS; m=m+1) begin
-					section_out[m] <= sum[m];
+					section_out_r[m] <= sum[m];
 				end
 			end
 		end
 	end
   //   ------------------ Section # : Comb ------------------
 	genvar i;
-	generate for(i=1;i<2*SECTIONS;i=i+1) begin : U
+	generate for(i=1;i<2*SECTIONS;i=i+1) begin : Comb
 		assign section_in[i+1] = section_out[i];
 	end
 	endgenerate
@@ -135,7 +136,7 @@ module CIC_Down #
 		end
 		else begin
 			if (phase_1 == 1'b1) begin
-				output_register <= section_out6;
+				output_register <= section_out[2*SECTIONS];
 			end
 		end
 	end

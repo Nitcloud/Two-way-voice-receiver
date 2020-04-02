@@ -14,10 +14,8 @@ wire 	clk_500m;
 wire 	clk_250m;
 wire 	clk_100m;
 wire 	clk_50m;
-
 wire    locked;
-CLK_Global #
-(
+CLK_Global #(
 	.CLKIN_PERIOD(20),
     .Mult(20),
     .DIVCLK_DIV(1),
@@ -33,9 +31,7 @@ CLK_Global #
 
     .CLKOUT3_DIV(20),
     .CLK3_PHASE(0.0)
-)
-CLK_Global_u
-(
+) CLK_Global_u (
     .clk_in(sys_clk),
     .rst_n(1'b1),
 

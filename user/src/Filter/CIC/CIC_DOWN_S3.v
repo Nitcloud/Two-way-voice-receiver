@@ -43,7 +43,7 @@
 `timescale 1 ns / 1 ns
 
 module CIC_DOWN_S3 #(
-	parameter FACTOR       = 3,
+	parameter FACTOR       = 2,
 	parameter INPUT_WIDTH  = 12,
 	parameter OUTPUT_WIDTH = 15
 )
@@ -125,7 +125,7 @@ localparam FILTER_WIDTH = OUTPUT_WIDTH;
       end
       else begin
         if (clk_enable == 1'b1) begin
-          if (cur_count == FACTOR) begin
+          if (cur_count == FACTOR-1) begin
             cur_count <= 16'd0;
           end
           else begin
@@ -235,7 +235,7 @@ localparam FILTER_WIDTH = OUTPUT_WIDTH;
   assign sub_cast = section_in4;
   assign sub_cast_1 = diff1;
   assign sub_temp = sub_cast - sub_cast_1;
-  assign section_out4 = sub_temp[14:0];
+  assign section_out4 = sub_temp[FILTER_WIDTH:0];
 
   always @ (posedge clk or posedge reset)
     begin: comb_delay_section4
