@@ -1,8 +1,11 @@
 # compile verilog/system verilog design source files
 verilog xil_defaultlib  \
-"../../../../../../user/src/Filter/CIC/CIC_DOWN_2.v" \
+"../../../../../../user/sim/lib/AM_Module.v" \
 "../../../../../../user/src/Filter/CIC/CIC_DOWN_S3.v" \
-"../../../../../../user/sim/DDS_Gen.v" \
+"../../../../../../user/src/Demodule/Cordic.v" \
+"../../../../../../user/sim/lib/DDS_Gen.v" \
+"../../../../../../user/src/Demodule/Demodule.v" \
+"../../../../../../user/src/Demodule/IQ_Mixed.v" \
 "../../../../../../user/sim/testbench.v" \
 
 # compile glbl module

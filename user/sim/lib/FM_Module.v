@@ -9,7 +9,7 @@ module FM_Module #
     input                                       clk_in,
     input                                       RST,
     input  [INPUT_WIDTH  - 1 : 0]               wave_in,
-    input  [PHASE_WIDTH  - INPUT_WIDTH - 1 : 0] move_fre,
+    input  [PHASE_WIDTH  - INPUT_WIDTH - 1 : 0] move_fre, //(fre*1048576)/clk_in/1000000
     input  [PHASE_WIDTH  - 1 : 0]               center_fre,
     output [OUTPUT_WIDTH - 1 : 0]               FM_wave
 );

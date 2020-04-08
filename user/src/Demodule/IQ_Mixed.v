@@ -4,7 +4,7 @@ module IQ_MIXED #(
 	parameter PHASE_WIDTH  = 32,
 	//CIC_Filter_parameter
 	parameter FACTOR       = 400,
-	parameter Fiter_WIDTH  = 32,
+	parameter Fiter_WIDTH  = 38,
 	//IQ_MIXED_parameter
     parameter INPUT_WIDTH  = 12,
     parameter OUTPUT_WIDTH = 12
@@ -34,7 +34,8 @@ Cordic # (
     .RST(RST),
     .x_i(0), 
     .y_i(0),
-    .phase_in(Fre_word),          
+    .phase_in(Fre_word),       
+	.valid_in(~RST),   
         
     .x_o(cos_wave),
     .y_o(sin_wave),

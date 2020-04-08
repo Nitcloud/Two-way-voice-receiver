@@ -1,15 +1,12 @@
-module Demodule #
-(
+module Demodule #(
 	parameter FACTOR       = 400,
     parameter PHASE_WIDTH  = 32,
     parameter INPUT_WIDTH  = 8,
-    parameter OUTPUT_WIDTH = 24
-)
-(
+    parameter OUTPUT_WIDTH = 12
+) (
     input                     clk_in,
     input                     RST,
 
-    input  [15:0]             N,
     input  [PHASE_WIDTH-1:0]  Fre_word,
 
     input  [INPUT_WIDTH-1:0]  wave_in,
@@ -28,7 +25,7 @@ IQ_MIXED #(
     .LO_WIDTH     ( 12 ),
     .PHASE_WIDTH  ( PHASE_WIDTH ),
 	.FACTOR       ( FACTOR ),
-    .Fiter_WIDTH  ( 32 ),
+    .Fiter_WIDTH  ( 38 ),
     .INPUT_WIDTH  ( INPUT_WIDTH ),
     .OUTPUT_WIDTH ( OUTPUT_WIDTH )
 ) u_IQ_MIXED (
@@ -44,8 +41,6 @@ IQ_MIXED #(
 );
 
 wire  [OUTPUT_WIDTH-1:0] Y_diff;
-wire  [OUTPUT_WIDTH-1:0] Modulus;
-wire  [OUTPUT_WIDTH-1:0] phase_out;
 Cordic # (
     .XY_BITS(OUTPUT_WIDTH),               
     .PH_BITS(OUTPUT_WIDTH),      //1~32
@@ -57,6 +52,7 @@ Cordic # (
     .x_i(I_OUT), 
     .y_i(Q_OUT),
     .phase_in(0),          
+	.valid_in(~RST),   
      
     .x_o(AM_Demodule_OUT),
     .y_o(Y_diff),
