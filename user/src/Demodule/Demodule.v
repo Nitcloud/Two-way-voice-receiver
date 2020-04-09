@@ -1,12 +1,13 @@
 module Demodule #(
-	parameter FACTOR       = 400,
     parameter PHASE_WIDTH  = 32,
+	parameter Fiter_WIDTH  = 38,
     parameter INPUT_WIDTH  = 8,
     parameter OUTPUT_WIDTH = 12
 ) (
     input                     clk_in,
     input                     RST,
 
+	input  [15:0]             FACTOR,
     input  [PHASE_WIDTH-1:0]  Fre_word,
 
     input  [INPUT_WIDTH-1:0]  wave_in,
@@ -23,16 +24,16 @@ wire  [OUTPUT_WIDTH - 1 : 0]  Q_OUT;
 
 IQ_MIXED #(
     .LO_WIDTH     ( 12 ),
-    .PHASE_WIDTH  ( PHASE_WIDTH ),
-	.FACTOR       ( FACTOR ),
-    .Fiter_WIDTH  ( 38 ),
-    .INPUT_WIDTH  ( INPUT_WIDTH ),
+    .PHASE_WIDTH  ( PHASE_WIDTH  ),
+    .Fiter_WIDTH  ( Fiter_WIDTH  ),
+    .INPUT_WIDTH  ( INPUT_WIDTH  ),
     .OUTPUT_WIDTH ( OUTPUT_WIDTH )
 ) u_IQ_MIXED (
     .clk_in                  ( clk_in     ),
     .clk_out                 ( clk_out    ),
     .RST                     ( RST        ),
 	
+	.FACTOR                  ( FACTOR     ),
     .Fre_word                ( Fre_word   ),
 
     .wave_in                 ( wave_in    ),

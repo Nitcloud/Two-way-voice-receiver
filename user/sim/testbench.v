@@ -61,13 +61,15 @@ AM_Module #(
 wire  [11:0]  FM_Demodule_OUT;
 wire  [11:0]  AM_Demodule_OUT;
 Demodule #(
-    .FACTOR       ( 400 ),
     .PHASE_WIDTH  ( 32  ),
+	.Fiter_WIDTH  ( 38  ),
     .INPUT_WIDTH  ( 8   ),
     .OUTPUT_WIDTH ( 12  ))
  u_Demodule (
     .clk_in                  ( clk               ),
     .RST                     ( ~sys_rst_n        ),
+
+    .FACTOR       			 ( 16'd400           ),
     .Fre_word                ( 32'd459561501     ),
     .wave_in                 ( AM_wave           ),
 

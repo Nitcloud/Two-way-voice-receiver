@@ -3,7 +3,6 @@ module IQ_MIXED #(
     parameter LO_WIDTH     = 12,
 	parameter PHASE_WIDTH  = 32,
 	//CIC_Filter_parameter
-	parameter FACTOR       = 400,
 	parameter Fiter_WIDTH  = 38,
 	//IQ_MIXED_parameter
     parameter INPUT_WIDTH  = 12,
@@ -13,6 +12,7 @@ module IQ_MIXED #(
     output                        clk_out,  
     input                         RST,
 
+	input  [15:0]                 FACTOR,
     input  [PHASE_WIDTH - 1 : 0]  Fre_word,
 
     input  [INPUT_WIDTH - 1 : 0]  wave_in,
@@ -62,13 +62,13 @@ assign Q_SIG = Q_SIG_r[INPUT_WIDTH + LO_WIDTH - 1 : INPUT_WIDTH + LO_WIDTH - 12]
 
 wire        [Fiter_WIDTH-1:0] Fiter_wave_I;
 CIC_DOWN_S3#(
-	.FACTOR(FACTOR),
 	.INPUT_WIDTH(12),
 	.OUTPUT_WIDTH(Fiter_WIDTH)
 ) Fiter_I (
     .clk(clk_in),
     .clk_enable(1'd1),
     .reset(RST),
+	.FACTOR(FACTOR),
     .filter_in(I_SIG),
     .filter_out(Fiter_wave_I)
 );
@@ -76,13 +76,13 @@ assign I_OUT = Fiter_wave_I[Fiter_WIDTH - 1 : Fiter_WIDTH - OUTPUT_WIDTH];
 
 wire        [Fiter_WIDTH-1:0] Fiter_wave_Q;
 CIC_DOWN_S3#(
-	.FACTOR(FACTOR),
 	.INPUT_WIDTH(12),
 	.OUTPUT_WIDTH(Fiter_WIDTH)
 ) Fiter_Q(
     .clk(clk_in),
     .clk_enable(1'd1),
     .reset(RST),
+	.FACTOR(FACTOR),
     .filter_in(Q_SIG),
     .filter_out(Fiter_wave_Q),
 	.ce_out(clk_out)

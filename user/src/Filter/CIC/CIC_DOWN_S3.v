@@ -43,17 +43,16 @@
 `timescale 1 ns / 1 ns
 
 module CIC_DOWN_S3 #(
-	parameter FACTOR       = 2,
 	parameter INPUT_WIDTH  = 12,
 	parameter OUTPUT_WIDTH = 15
-)
-(
-	input   clk,
-	input   clk_enable,
-	input   reset,
+) (
+	input   						  clk,
+	input   						  clk_enable,
+	input   						  reset,
+	input          [15:0]             FACTOR,
 	input   signed [INPUT_WIDTH-1:0]  filter_in,
 	output  signed [OUTPUT_WIDTH-1:0] filter_out,
-	output  ce_out
+	output  						  ce_out
 );
 
 localparam FILTER_WIDTH = OUTPUT_WIDTH;
