@@ -1,37 +1,16 @@
-/***************************************************************************
-wire        [11:0] AM_wave;
-AM_Module_V2 #
-(
-    .INPUT_WIDTH(12),
-    .PHASE_WIDTH(32),
-    .OUTPUT_WIDTH(12)
-)
-AM_Module_V2_u(
-    .clk_in(clk_sys),
-    .RST(1'b0),
-    .wave_in(sin_wave),
-    .module_deep(16'd32768),       //(2^16-1)*percent
-    .center_fre(32'd229780750),    //(fre*4294967296)/clk_in/1000000
-    .AM_wave(AM_wave)
-);
-***************************************************************************/
 `timescale 1ns / 1ps
-module AM_Module #
-(
+module FM_Modulate #(
     parameter INPUT_WIDTH  = 12,
     parameter PHASE_WIDTH  = 32,
     parameter OUTPUT_WIDTH = 12
-)
-(
-    input                         clk_in,
-    input                         RST,
-    input  [INPUT_WIDTH - 1 : 0]  wave_in,
-    input  [15:0]                 module_deep,
-    input  [PHASE_WIDTH - 1 : 0]  center_fre,
-    output [OUTPUT_WIDTH - 1 : 0] AM_wave
+) (
+    input                                       clk_in,
+    input                                       RST,
+    input  [INPUT_WIDTH  - 1 : 0]               wave_in,
+    input  [PHASE_WIDTH  - INPUT_WIDTH - 1 : 0] move_fre,   //(fre*1048576)/clk_in/1000000
+    input  [PHASE_WIDTH  - 1 : 0]               center_fre, //(fre*4294967296)/clk_in/1000000
+    output [OUTPUT_WIDTH - 1 : 0]               FM_wave
 );
-
-
 
 reg        [INPUT_WIDTH  - 1 : 0] wave_in_r = 0;
 always @(posedge clk_in) begin
@@ -43,39 +22,49 @@ always @(posedge clk_in) begin
     end
 end
 
-reg signed [INPUT_WIDTH + 16 : 0] data_r0 = 0;
+reg signed [PHASE_WIDTH : 0] data_r0 = 0;
 always @(posedge clk_in) begin
     if (RST) begin
         data_r0 <= 0;
     end
     else begin
-        data_r0 <= $signed(wave_in_r) * $signed({1'd0,module_deep});
+        data_r0 <= $signed(wave_in_r) * $signed({1'd0,move_fre});
     end
 end
 
-reg signed [INPUT_WIDTH  - 1 : 0] data_r1 = 0;
+reg signed [PHASE_WIDTH - 1 : 0] data_r1 = 0;
 always @(posedge clk_in) begin
     if (RST) begin
         data_r1 <= 0;
     end
     else begin
-        data_r1 <= data_r0[INPUT_WIDTH + 15 : 16];
+        data_r1 <= data_r0[PHASE_WIDTH - 1 : 0];
     end
 end
 
-reg        [INPUT_WIDTH  - 1 : 0] data_r2 = 0;
+reg signed [PHASE_WIDTH : 0] data_r2 = 0;
 always @(posedge clk_in) begin
     if (RST) begin
         data_r2 <= 0;
     end
     else begin
-        data_r2 <= $signed(data_r1) + 12'd2048;
+        data_r2 <= $signed(data_r1) + $signed({1'd0,center_fre});
+    end
+end
+
+reg [PHASE_WIDTH - 1 : 0] Fre_word = 0;
+always @(posedge clk_in) begin
+    if (RST) begin
+        Fre_word <= 0;
+    end
+    else begin
+        Fre_word <= data_r2[PHASE_WIDTH - 1 : 0];
     end
 end
 
 reg [PHASE_WIDTH - 1 : 0] addr_r0 = 0;
 always @(posedge clk_in) begin
-    addr_r0 <= addr_r0 + center_fre;
+    addr_r0 <= addr_r0 + Fre_word;
 end
 
 reg [9:0] addr_r1 = 0;
@@ -357,44 +346,25 @@ always @(*) begin
     endcase
 end
 
-reg signed [13 : 0] AM_Carry_r0;
+reg signed [OUTPUT_WIDTH - 1 : 0] FM_out_r0;
 always @(*) begin
     case (addr_r1[9]) 
-        1'b0    :   begin AM_Carry_r0 <= wave_out_r[13 : 0]; end
-        1'b1    :   begin AM_Carry_r0 <= - wave_out_r[13 : 0]; end
-        default :   begin AM_Carry_r0 <= 14'd0; end
+        1'b0    :   begin FM_out_r0 <= wave_out_r[13 : 14 - OUTPUT_WIDTH]; end
+        1'b1    :   begin FM_out_r0 <= - wave_out_r[13 : 14 - OUTPUT_WIDTH]; end
+        default :   begin FM_out_r0 <= 14'd0; end
     endcase
 end
 
-reg signed [13 : 0] AM_Carry_r1;
+reg signed [OUTPUT_WIDTH - 1 : 0] FM_out_r1;
 always @(posedge clk_in) begin
     if (RST) begin
-        AM_Carry_r1 <= 0;
+        FM_out_r1 <= 0;
     end
     else begin
-        AM_Carry_r1 <= AM_Carry_r0;
+        FM_out_r1 <= FM_out_r0;
     end
 end
 
-reg signed [INPUT_WIDTH + 14 : 0] AM_wave_r0;
-always @(posedge clk_in) begin
-    if (RST) begin
-        AM_wave_r0 <= 0;
-    end
-    else begin
-        AM_wave_r0 <= $signed(AM_Carry_r1) * $signed({1'b0,data_r2});
-    end
-end
-
-reg signed [OUTPUT_WIDTH - 1 : 0] AM_wave_r1;
-always @(posedge clk_in) begin
-    if (RST) begin
-        AM_wave_r1 <= 0;
-    end
-    else begin
-        AM_wave_r1 <= AM_wave_r0[INPUT_WIDTH + 13 : INPUT_WIDTH + 14 - OUTPUT_WIDTH];
-    end
-end
-assign AM_wave = AM_wave_r1;
+assign FM_wave = FM_out_r1;
 
 endmodule

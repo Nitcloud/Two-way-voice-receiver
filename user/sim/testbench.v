@@ -29,11 +29,11 @@ DDS_Gen #(
 );
 
 // wire  [7:0]  FM_wave;
-// FM_Module #(
+// FM_Modulate #(
 //     .INPUT_WIDTH  ( 12 ),
 //     .PHASE_WIDTH  ( 32 ),
 //     .OUTPUT_WIDTH ( 8  ))
-//  u_FM_Module (
+//  u_FM_Modulate (
 //     .clk_in                  ( clk           ),
 //     .RST                     ( ~sys_rst_n    ),
 //     .wave_in                 ( wave_out_sin  ),
@@ -44,11 +44,11 @@ DDS_Gen #(
 // );
 
 wire  [7:0]  AM_wave;
-AM_Module #(
+AM_Modulate #(
     .INPUT_WIDTH  ( 12 ),
     .PHASE_WIDTH  ( 32 ),
     .OUTPUT_WIDTH ( 8  ))
- u_AM_Module (
+ u_AM_Modulate (
     .clk_in                  ( clk           ),
     .RST                     ( ~sys_rst_n    ),
     .wave_in                 ( wave_out_sin  ),
