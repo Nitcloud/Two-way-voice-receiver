@@ -64,7 +64,7 @@ always @(posedge clk_in) begin
     addr_r1 <= addr_r0[PHASE_WIDTH - 1 : PHASE_WIDTH - 10];
 end
 
-reg  [7:0] addr; 
+reg  [7:0] addr = 0; 
 always @(*) begin
     case (addr_r1[9:8]) 
         2'b00    :   begin addr <= addr_r1[7:0]; end
@@ -75,7 +75,7 @@ always @(*) begin
     endcase
 end
 
-reg signed [13:0] wave_out_r;
+reg signed [13:0] wave_out_r = 0;
 always @(*) begin
     case (addr)
         8'd0 : begin wave_out_r <= 0; end
@@ -338,7 +338,7 @@ always @(*) begin
     endcase
 end
 
-reg signed [13 : 0] AM_Carry_r0;
+reg signed [13 : 0] AM_Carry_r0 = 0;
 always @(*) begin
     case (addr_r1[9]) 
         1'b0    :   begin AM_Carry_r0 <= wave_out_r[13 : 0]; end
@@ -347,7 +347,7 @@ always @(*) begin
     endcase
 end
 
-reg signed [13 : 0] AM_Carry_r1;
+reg signed [13 : 0] AM_Carry_r1 = 0;
 always @(posedge clk_in) begin
     if (RST) begin
         AM_Carry_r1 <= 0;
@@ -357,7 +357,7 @@ always @(posedge clk_in) begin
     end
 end
 
-reg signed [INPUT_WIDTH + 14 : 0] AM_wave_r0;
+reg signed [INPUT_WIDTH + 14 : 0] AM_wave_r0 = 0;
 always @(posedge clk_in) begin
     if (RST) begin
         AM_wave_r0 <= 0;
@@ -367,7 +367,7 @@ always @(posedge clk_in) begin
     end
 end
 
-reg signed [OUTPUT_WIDTH - 1 : 0] AM_wave_r1;
+reg signed [OUTPUT_WIDTH - 1 : 0] AM_wave_r1 = 0;
 always @(posedge clk_in) begin
     if (RST) begin
         AM_wave_r1 <= 0;

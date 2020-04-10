@@ -1,11 +1,11 @@
 # compile verilog/system verilog design source files
 verilog xil_defaultlib  \
-"../../../../../../user/sim/lib/AM_Module.v" \
+"../../../../../../user/sim/lib/AM_Modulate.v" \
 "../../../../../../user/src/Filter/CIC/CIC_DOWN_S3.v" \
-"../../../../../../user/src/Demodule/Cordic.v" \
+"../../../../../../user/src/Demodulate/Cordic.v" \
 "../../../../../../user/sim/lib/DDS_Gen.v" \
-"../../../../../../user/src/Demodule/Demodule.v" \
-"../../../../../../user/src/Demodule/IQ_Mixed.v" \
+"../../../../../../user/src/Demodulate/Demodulate.v" \
+"../../../../../../user/src/Demodulate/IQ_Mixed.v" \
 "../../../../../../user/sim/testbench.v" \
 
 # compile glbl module

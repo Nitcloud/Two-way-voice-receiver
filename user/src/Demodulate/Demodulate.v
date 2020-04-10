@@ -1,4 +1,4 @@
-module Demodule #(
+module Demodulate #(
     parameter PHASE_WIDTH  = 32,
 	parameter Fiter_WIDTH  = 38,
     parameter INPUT_WIDTH  = 8,
@@ -47,7 +47,7 @@ Cordic # (
     .PH_BITS(OUTPUT_WIDTH),      //1~32
     .ITERATIONS(16),     //1~32
     .CORDIC_STYLE("VECTOR")      //ROTATE  //VECTOR
-) Demodule_Gen_u (
+) Demodulate_Gen_u (
     .clk_in(clk_out),
     .RST(RST),
     .x_i(I_OUT), 

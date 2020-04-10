@@ -1,24 +1,24 @@
 Vivado Simulator 2018.3
 Copyright 1986-1999, 2001-2018 Xilinx, Inc. All Rights Reserved.
-Running: D:/APP/vivado_18_3/Vivado/2018.3/bin/unwrapped/win64.o/xelab.exe -wto d1a3eebdb6514b20b12eb3dc1ca3cdf7 --incr --debug typical --relax --mt 6 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot testbench_behav xil_defaultlib.testbench xil_defaultlib.glbl -log elaborate.log 
+Running: D:/APP/vivado_18_3/Vivado/2018.3/bin/unwrapped/win64.o/xelab.exe -wto 42035f7ff5cd47e4acc569b038d38c14 --incr --debug typical --relax --mt 6 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot testbench_behav xil_defaultlib.testbench xil_defaultlib.glbl -log elaborate.log 
 Using 6 slave threads.
 Starting static elaboration
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 12 for port 'x_i' [D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodule/IQ_Mixed.v:35]
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 12 for port 'y_i' [D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodule/IQ_Mixed.v:36]
-WARNING: [VRFC 10-3091] actual bit length 38 differs from formal bit length 12 for port 'filter_in' [D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodule/IQ_Mixed.v:72]
-WARNING: [VRFC 10-3091] actual bit length 38 differs from formal bit length 12 for port 'filter_in' [D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodule/IQ_Mixed.v:86]
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 12 for port 'phase_in' [D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodule/Demodule.v:54]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 12 for port 'x_i' [D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/IQ_Mixed.v:35]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 12 for port 'y_i' [D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/IQ_Mixed.v:36]
+WARNING: [VRFC 10-3091] actual bit length 38 differs from formal bit length 12 for port 'filter_in' [D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/IQ_Mixed.v:72]
+WARNING: [VRFC 10-3091] actual bit length 38 differs from formal bit length 12 for port 'filter_in' [D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/IQ_Mixed.v:86]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 12 for port 'phase_in' [D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/Demodulate.v:55]
 Completed static elaboration
 Starting simulation data flow analysis
 Completed simulation data flow analysis
 Time Resolution for simulation is 1ps
 Compiling module xil_defaultlib.DDS_Gen_default
-Compiling module xil_defaultlib.AM_Module(OUTPUT_WIDTH=8)
+Compiling module xil_defaultlib.AM_Modulate(OUTPUT_WIDTH=8)
 Compiling module xil_defaultlib.Cordic(ITERATIONS=16)
-Compiling module xil_defaultlib.CIC_DOWN_S3(FACTOR=400,OUTPUT_WI...
+Compiling module xil_defaultlib.CIC_DOWN_S3(OUTPUT_WIDTH=38)
 Compiling module xil_defaultlib.IQ_MIXED(INPUT_WIDTH=8)
 Compiling module xil_defaultlib.Cordic(PH_BITS=12,ITERATIONS=16,...
-Compiling module xil_defaultlib.Demodule
+Compiling module xil_defaultlib.Demodulate
 Compiling module xil_defaultlib.testbench
 Compiling module xil_defaultlib.glbl
 Built simulation snapshot testbench_behav

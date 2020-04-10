@@ -60,12 +60,12 @@ AM_Modulate #(
 
 wire  [11:0]  FM_Demodule_OUT;
 wire  [11:0]  AM_Demodule_OUT;
-Demodule #(
+Demodulate #(
     .PHASE_WIDTH  ( 32  ),
 	.Fiter_WIDTH  ( 38  ),
     .INPUT_WIDTH  ( 8   ),
     .OUTPUT_WIDTH ( 12  ))
- u_Demodule (
+ u_Demodulate (
     .clk_in                  ( clk               ),
     .RST                     ( ~sys_rst_n        ),
 

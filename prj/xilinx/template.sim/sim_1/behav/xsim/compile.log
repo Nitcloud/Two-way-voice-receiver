@@ -1,14 +1,14 @@
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/lib/AM_Module.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module AM_Module
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/lib/AM_Modulate.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AM_Modulate
 INFO: [VRFC 10-2263] Analyzing Verilog file "D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Filter/CIC/CIC_DOWN_S3.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module CIC_DOWN_S3
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodule/Cordic.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/Cordic.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module Cordic
 INFO: [VRFC 10-2263] Analyzing Verilog file "D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/lib/DDS_Gen.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module DDS_Gen
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodule/Demodule.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module Demodule
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodule/IQ_Mixed.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/Demodulate.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Demodulate
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/IQ_Mixed.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module IQ_MIXED
 INFO: [VRFC 10-2263] Analyzing Verilog file "D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/testbench.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module testbench
