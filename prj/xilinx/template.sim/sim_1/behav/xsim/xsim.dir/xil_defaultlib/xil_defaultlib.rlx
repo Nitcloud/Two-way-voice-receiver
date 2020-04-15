@@ -3,11 +3,11 @@
 Dec  7 2018
 00:33:28
 D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/prj/Xilinx/template.sim/sim_1/behav/xsim/glbl.v,1544155481,verilog,,,,glbl,,,,,,,,
-D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/lib/AM_Modulate.v,1586521648,verilog,,D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Filter/CIC/CIC_DOWN_S3.v,,AM_Modulate,,,,,,,,
+D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/lib/AM_Modulate.v,1586951245,verilog,,D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Filter/CIC/CIC_DOWN_S3.v,,AM_Modulate,,,,,,,,
 D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/lib/DDS_Gen.v,1586339491,verilog,,D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/Demodulate.v,,DDS_Gen,,,,,,,,
-D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/testbench.v,1586422759,verilog,,,,testbench,,,,,,,,
-,,,,D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/lib/DDS_Gen.v,,Cordic,,,,,,,,
-,,,,D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/IQ_Mixed.v,,Demodulate,,,,,,,,
-,,,,D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/testbench.v,,IQ_MIXED,,,,,,,,
-,,,,,,,,,,,,,,
+D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/lib/FM_Modulate.v,1586950369,verilog,,D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/IQ_Mixed.v,,FM_Modulate,,,,,,,,
+D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/testbench.v,1586949984,verilog,,,,testbench,,,,,,,,
+D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/Cordic.v,1586951131,verilog,,D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/lib/DDS_Gen.v,,Cordic,,,,,,,,
+D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/Demodulate.v,1586523349,verilog,,D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/lib/FM_Modulate.v,,Demodulate,,,,,,,,
+D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/IQ_Mixed.v,1586415431,verilog,,D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/sim/testbench.v,,IQ_MIXED,,,,,,,,
 D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Filter/CIC/CIC_DOWN_S3.v,1586418384,verilog,,D:/project/FPGA/My_FPGA/TCL_project/Prj/Two-way-voice-receiver/user/src/Demodulate/Cordic.v,,CIC_DOWN_S3,,,,,,,,

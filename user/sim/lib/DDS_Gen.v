@@ -1,11 +1,9 @@
-module DDS_Gen #
-(
+module DDS_Gen #(
 	parameter OUTPUT_WIDTH = 12,
 	parameter PHASE_WIDTH  = 32
-)
-(
+) (
     input                         clk_in,
-    input  [PHASE_WIDTH  - 1 : 0] Fre_word,
+    input  [PHASE_WIDTH  - 1 : 0] Fre_word, //(fre*2^PHASE_WIDTH)/Fc
     input  [PHASE_WIDTH  - 1 : 0] Pha_word,
     output [OUTPUT_WIDTH - 1 : 0] wave_out_sin,
 	output [OUTPUT_WIDTH - 1 : 0] wave_out_tri,
@@ -14,9 +12,9 @@ module DDS_Gen #
 
 localparam [OUTPUT_WIDTH  - 1 : 0] DC_SUB = 2**(OUTPUT_WIDTH-1);
 
-reg [OUTPUT_WIDTH - 1 : 0] wave_out_sin_r;
-reg [OUTPUT_WIDTH - 1 : 0] wave_out_tri_r;
-reg [OUTPUT_WIDTH - 1 : 0] wave_out_saw_r;
+reg [OUTPUT_WIDTH - 1 : 0] wave_out_sin_r = 0;
+reg [OUTPUT_WIDTH - 1 : 0] wave_out_tri_r = 0;
+reg [OUTPUT_WIDTH - 1 : 0] wave_out_saw_r = 0;
 
 reg [PHASE_WIDTH - 1 : 0] addr_r0 = 0;
 reg [PHASE_WIDTH - 1 : 0] addr_r1 = 0;
@@ -24,7 +22,6 @@ always @(posedge clk_in) begin
 	addr_r0 <= addr_r0 + Fre_word;
 	addr_r1 <= addr_r0 + Pha_word;
 end
-
 
 always @(posedge clk_in ) begin
 	wave_out_saw_r <= addr_r1[PHASE_WIDTH - 1 : PHASE_WIDTH - OUTPUT_WIDTH];
@@ -44,7 +41,7 @@ always @(posedge clk_in) begin
 	addr_r <= addr_r1[PHASE_WIDTH  - 1 : PHASE_WIDTH  - 10];
 end
 
-reg  [7:0] addr; 
+reg  [7:0] addr = 0; 
 always @(*) begin
 	case (addr_r[9:8]) 
 	    2'b00    :   begin addr <= addr_r[7:0]; end
@@ -55,7 +52,7 @@ always @(*) begin
 	endcase
 end
 
-reg signed [13:0] wave_sin_buf;
+reg signed [13:0] wave_sin_buf = 0;
 always @(*) begin
 	case (addr)
 		8'd0 : begin wave_sin_buf <= 0; end
@@ -326,4 +323,5 @@ always @(*) begin
 	endcase
 end
 assign wave_out_sin = wave_out_sin_r;
+
 endmodule

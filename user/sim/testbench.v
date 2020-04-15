@@ -28,31 +28,32 @@ DDS_Gen #(
     .wave_out_saw            ( wave_out_saw   )
 );
 
-// wire  [7:0]  FM_wave;
-// FM_Modulate #(
-//     .INPUT_WIDTH  ( 12 ),
-//     .PHASE_WIDTH  ( 32 ),
-//     .OUTPUT_WIDTH ( 8  ))
-//  u_FM_Modulate (
-//     .clk_in                  ( clk           ),
-//     .RST                     ( ~sys_rst_n    ),
-//     .wave_in                 ( wave_out_sin  ),
-//     .move_fre                ( 20'd262       ),  //25k
-//     .center_fre              ( 32'd459561501 ),  //10.7M
+wire  [7:0]  FM_wave;
+FM_Modulate #(
+    .INPUT_WIDTH  ( 12 ),
+    .PHASE_WIDTH  ( 32 ),
+    .OUTPUT_WIDTH ( 8  ))
+ u_FM_Modulate (
+    .clk_in                  ( clk           ),
+    .RST                     ( ~sys_rst_n    ),
+    .wave_in                 ( wave_out_sin  ),
+    .move_fre                ( 20'd262       ),  //25k
+    .center_fre              ( 32'd459561501 ),  //10.7M
 
-//     .FM_wave                 ( FM_wave      )
-// );
+    .FM_wave                 ( FM_wave      )
+);
 
 wire  [7:0]  AM_wave;
 AM_Modulate #(
     .INPUT_WIDTH  ( 12 ),
     .PHASE_WIDTH  ( 32 ),
+	.DEEP_WIDTH   ( 12 ),
     .OUTPUT_WIDTH ( 8  ))
  u_AM_Modulate (
     .clk_in                  ( clk           ),
     .RST                     ( ~sys_rst_n    ),
     .wave_in                 ( wave_out_sin  ),
-    .module_deep             ( 16'd65530     ),  //25k
+    .modulate_deep           ( 12'd4090      ),  //100%
     .center_fre              ( 32'd459561501 ),  //10.7M
 
     .AM_wave                 ( AM_wave      )
@@ -71,7 +72,7 @@ Demodulate #(
 
     .FACTOR       			 ( 16'd400           ),
     .Fre_word                ( 32'd459561501     ),
-    .wave_in                 ( AM_wave           ),
+    .wave_in                 ( FM_wave           ),
 
     .FM_Demodule_OUT         ( FM_Demodule_OUT   ),
     .AM_Demodule_OUT         ( AM_Demodule_OUT   )

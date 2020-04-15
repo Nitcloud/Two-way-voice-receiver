@@ -60,7 +60,7 @@ Cordic # (
     .phase_out(PM_Demodule_OUT)
 );
 
-reg [OUTPUT_WIDTH-1:0] PM_Demodule_OUT_r;
+reg [OUTPUT_WIDTH-1:0] PM_Demodule_OUT_r = 0;
 always @(posedge clk_out) begin
     PM_Demodule_OUT_r <= PM_Demodule_OUT;
 end

@@ -1,57 +1,5 @@
-/*  file:        Cordic.v
-    author:      Sterben(Duan)
-    release:     05/12/2019
-
-    The core will operate in one
-    of two modes:
- 
- 
-    ROTATE:  In this mode the user supplies a X and Y cartesian vector and an angle.  The
-             CORDIC rotator seeks to reduce the angle to zero by rotating the vector.
- 
-             To compute the cos and sin of the angle, set the inputs as follows:
- 
-             y_in = 0;
-             x_in = `CORDIC_1
-             phase_inn = the input angle
- 
-             on completion:
- 
-             y_out = sin
-             x_out = cos
- 
-             The `CORDIC_1 above is the inverse of the cordic gain... or ~0.603
-             The input angle depends on whether you build in radian or degree mode
-             see the description of the `defines below.
- 
- 
-    VECTOR:  In this mode the user supplies the tangent value in x and y and the rotator
-             seeks to minimize the y value, thus computing the angle.
- 
-             To compute the arctan set the inputs as follows
- 
-             y_in and x_in  such that y/x = the tangent value for which you wish to find the angle
-             phase_inn = 0;
- 
-             on completion
- 
-             phase_outut = the angle
-*/
- 
-/* data valid flag
- 
-   The iterative CORDIC implementations take a predetermined number of clock cycles to complete
-   If the VALID_FLAG is defined the core instantiates a dvalid_in and dvalid_out signal.  This
-   signal makes no sense in the COMBINATORIAL mode.
-*/
-// `define VALID_FLAG
- 
- 
-//====================   DO NOT EDIT BELOW THIS LINE ======================
-/*                 
-CORDIC
-*/
 `timescale 1ns / 1ps
+
 module Cordic #(
 	parameter XY_BITS      = 12,
 	parameter PH_BITS      = 32,
@@ -119,10 +67,10 @@ begin
 end
 endfunction
 
-reg        [1:0] data_in_buff[ITERATIONS:0];
-reg signed [XY_BITS-1:0] x [ITERATIONS:0];
-reg signed [XY_BITS-1:0] y [ITERATIONS:0];
-reg signed [PH_BITS-1:0] z [ITERATIONS:0];
+reg        [1:0] data_in_buff [ITERATIONS:0];
+reg signed [XY_BITS-1:0]   x  [ITERATIONS:0];
+reg signed [XY_BITS-1:0]   y  [ITERATIONS:0];
+reg signed [PH_BITS-1:0]   z  [ITERATIONS:0];
 
 integer m;
 initial begin
@@ -142,6 +90,13 @@ integer s;
 initial begin
 	for (s = 0; s<=ITERATIONS; s=s+1) begin
 		z[s] = 0;
+	end    
+end
+
+integer k;
+initial begin
+	for (k = 0; k<=ITERATIONS; k=k+1) begin
+		data_in_buff[k] = 0;
 	end    
 end
 

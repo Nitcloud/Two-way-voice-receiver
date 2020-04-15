@@ -5,6 +5,7 @@ verilog xil_defaultlib  \
 "../../../../../../user/src/Demodulate/Cordic.v" \
 "../../../../../../user/sim/lib/DDS_Gen.v" \
 "../../../../../../user/src/Demodulate/Demodulate.v" \
+"../../../../../../user/sim/lib/FM_Modulate.v" \
 "../../../../../../user/src/Demodulate/IQ_Mixed.v" \
 "../../../../../../user/sim/testbench.v" \
 
